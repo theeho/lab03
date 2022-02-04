@@ -48,22 +48,69 @@ ggplot(data = elmhurst) +
        y = "number of observations", 
        title = "number of observations per gift aid amount")
 ```
-
+The distribution of gift aid does not appear to be normal. It seems a bit more uniform than normal. There are a few outliers at around 7k and 32k.  Around 21k seems to have many more observatioins. As well as 25-27k. 
 
 2. To better understand the distribution of `gift_aid`, we would like calculate measures of center and spread of the distribution. Use the `summarise` function to calculate the appropriate measures of center (mean or median) and spread (standard deviation or IQR) based on the shape of the distribution from Exercise 1. Show the code and output, and state the measures of center and spread in your narrative. *Be sure to report your conclusions for this exercise and the remainder of the lab in dollars.*
+```{r}
+elmhurst %>%
+  summarise(min = min(gift_aid), 
+            q1 = quantile(gift_aid, .25), 
+            median = median(gift_aid), 
+            q3 = quantile(gift_aid, .75), 
+            max = max(gift_aid), 
+            iqr = IQR(gift_aid), 
+            mean = mean(gift_aid), 
+            std_dev = sd(gift_aid)
+            )
+```
+The miniumum gift aid is 7,000 USD while the maximum is 32,720 USD. These where the percise values of the 2 outliers we observed in the histogram. The middle 50% of the gift aid is between 16,250 USD and 23.515 USD. The mean is roughly centered in the data as it is very close to the median. Based on this summary, I would say the distribution is reasonably balanced and not too far spread with an IQR of 7,625 USD and a STD of 5,460 USD.
+
 
 3. Plot the distribution of `family_income` and calculate the appropriate summary statistics. Describe the distribution of `family_income` (shape, center, and spread, outliers) using the plot and appropriate summary statistics.  
+```{r}
+ggplot(data = elmhurst) +
+  geom_histogram(mapping = aes(x = family_income), binwidth = 5) + 
+  labs(x = "family income in thousands $", 
+       y = "number of observations", 
+       title = "number of observations per family income")
+
+elmhurst %>%
+  summarise(min = min(family_income), 
+            q1 = quantile(family_income, .25), 
+            median = median(family_income), 
+            q3 = quantile(family_income, .75), 
+            max = max(family_income), 
+            iqr = IQR(family_income), 
+            mean = mean(family_income), 
+            std_dev = sd(family_income)
+            )
+```
+The majority of the incomes based on the plot seem to be around 75k USD and 100k USD. This is reflected with an 88k USD median and how 50% of the incomes are between 65k USD and 137k USD. However, there is a fair bit of income outliers in the higher range. The max is 271k USD and the 75% quantile is at 137k USD. Based on this, I would say that the data is pretty spread out with a very high STD and IQR of 63k USD and 73K USD repspectively. 
+
 
 4. Create a scatterplot to display the relationship between `gift_aid` (response variable) and `family_income` (predictor variable). Use the scatterplot to describe the relationship between the two variables. Be sure the scatterplot includes informative axis labels and title.
+```{r}
+ggplot(elmhurst, aes(x=family_income, y=gift_aid)) + geom_point()+ 
+  labs(x = "family income in thousands $", 
+       y = "gift aid in thousnands $", 
+       title = "gift aid per family income ")
+```
+
+Based on this scatter plot, there appears to be some relationship between gift aid and family income. Although there are a few strange outliers such as the highest family income. The relationship seems to be that an increase in family income is associated with a decrease in gift aid. Althougfh this relationship seems to be less apparent as the family income increases past 150k USD. 
+
 
 ## Simple Linear Regression
 
 5. Use the `lm` function to fit a simple linear regression model using `family_income` to explain variation in `gift_aid`. Complete the code below to assign your model a name, and use the `tidy` and `kable` functions to neatly display the model output. *Replace X and Y with the appropriate variable names.*
 
 ```{r eval=FALSE}
-_____ <- lm(Y ~ X, data = _____)
-tidy(_____) %>% # output model
+linear_Model <- lm(gift_aid ~ family_income, data = elmhurst)
+tidy(linear_Model) %>% # output model
   kable(digits = 3) # format model output
+
+ggplot(data = elmhurst, aes(x = family_income, y = gift_aid)) + 
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
 ```
 
 6. Interpret the slope in the context of the problem.
