@@ -69,7 +69,7 @@ The miniumum gift aid is 7,000 USD while the maximum is 32,720 USD. These where 
 3. Plot the distribution of `family_income` and calculate the appropriate summary statistics. Describe the distribution of `family_income` (shape, center, and spread, outliers) using the plot and appropriate summary statistics.  
 ```{r}
 ggplot(data = elmhurst) +
-  geom_histogram(mapping = aes(x = family_income), binwidth = 5) + 
+  geom_histogram(mapping = aes(x = family_income), binwidth = 7) + 
   labs(x = "family income in thousands $", 
        y = "number of observations", 
        title = "number of observations per family income")
@@ -115,6 +115,8 @@ ggplot(data = elmhurst, aes(x = family_income, y = gift_aid)) +
 
 6. Interpret the slope in the context of the problem.
 
+Every 1 USD increase in family income is ascociated with a .043 USD decrease in gifted aid. 
+
 7. When we fit a linear regression model, we make assumptions about the underlying relationship between the response and predictor variables. In practice, we can check that the assumptions hold by analyzing the residuals. Over the next few questions, we will examine plots of the residuals to determine if the assumptions are met.
 
 Let's begin by calculating the residuals and adding them to the dataset. Fill in the model name in the code below to add residuals to the original dataset using the `resid()` and `mutate()` functions.
@@ -142,8 +144,12 @@ ggplot(data = residual_model, aes(x = family_income, y = resid)) +
 
     - *Ideally, there would be no discernible shape in the plot. This is an indication that the linear model adequately describes the relationship between the response and predictor, and all that is left is the random error that can't be accounted for in the model, i.e. other things that affect gift aid besides family income.*
     - *If there is an obvious shape in the plot (e.g. a parabola), this means that the linear model does not adequately describe the relationship between the response and predictor variables.*
+    
+    
 
 Based on this, is the linearity condition is satisfied? Briefly explain your reasoning. 
+
+It appears that lower values of family income have much less residual variance than higher values of family income. However, there does not appear to be a discernible shape of the residuals. It appears to be random. 
 
 10. Recall that when we fit a regression model, we assume for any given value of $x$, the $y$ values follow the Normal distribution with mean $\beta_0 + \beta_1 x$ and variance $\sigma^2$. We will look at two sets of plots to check that this assumption holds.
 
@@ -151,10 +157,13 @@ Based on this, is the linearity condition is satisfied? Briefly explain your rea
 
     Using the scatterplot from Exercise 8 , is the constant variance assumption satisfied? Briefly explain your reasoning. *Note: You don't need to know the value of $\sigma^2$ to answer this question.*
 
+There does not appear to be a constant variance for the residuals. Residual values of family income less than 100k USD seem to have a constant variance. However, larger income families seem to have a much higher error. Thus the constant variance assumption does not seem to be satisfied. 
 
 11. Next, we will assess with Normality assumption, i.e. that the distribution of the $y$ values is Normal at every value of $x$. In practice, it is impossible to check the distribution of $y$ at every possible value of $x$, so we can check whether the assumption is satisfied by looking at the overall distribution of the residuals. The assumption is satisfied if the distribution of residuals is approximately Normal, i.e. unimodal and symmetric.
 
     Make a histogram of the residuals. Based on the histogram, is the Normality assumption satisfied? Briefly explain your reasoning. 
+    
+    Based on the plot below, we do see some resemblence of a normal distribution. However, it does not appear to be completely cemetric. 
 ```{r}
 ggplot(data = residual_model) +
   geom_histogram(mapping = aes(x = resid), binwidth = 2)
@@ -162,16 +171,24 @@ ggplot(data = residual_model) +
 
 12. The final assumption is that the observations are independent, i.e. one observation does not affect another. We can typically make an assessment about this assumption using a description of the data. Do you think the independence assumption is satisfied? Briefly explain your reasoning. 
 
+Based on the description of the dataset "This dataset contains information about 50 randomly selected students from the 2011 freshmen class at Elmhurst College." It can be assumed that this is a random sample. 
+
 ## Using the Model
 
 13. Calculate $R^2$ for this model and interpret it in the context of the data.
 ```{r}
 summary(linear_Model)
 ```
-
+The interpretation of the R-Squared is that about 25% of the variance in financial aid is ascociated with family income. 
 
 14. Suppose a high school senior is considering Elmhurst College, and she would like to use your regression model to estimate how much gift aid she can expect to receive. Her family income is $90,000. Based on your model, about how much gift aid should she expect to receive? Show the code or calculations you use to get the prediction. 
+```{r}
+predict(linear_Model, newdata = data.frame(family_income = 90))
+```
+Based on the model, she should expect 20,442 USD in gift aid. 
 
 15. Another high school senior is considering Elmhurst College, and her family income is about $310,000. Do you think it would be wise to use your model calculate the predicted gift aid for this student?  Briefly explain your reasoning. 
+
+Our model does not contain any data greater than 272k USD. Therefor we cannot use our model. 
 
 *You're done and ready to submit your work! Knit, commit, and push all remaining changes. You can use the commit message "Done with Lab 2!", and make sure you have pushed all the files to GitHub (your Git pane in RStudio should be empty) and that <u>all</u> documents are updated in your repo on GitHub. Then submit the assignment on Gradescope following the instructions below.*
