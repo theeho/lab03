@@ -2,7 +2,7 @@
 title: "Untitled"
 author: "STAT 108"
 date: "1/26/2022"
-output: html_document
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
@@ -43,12 +43,12 @@ The `elmhurst` dataset contains the following variables:
 
 ```{r}
 ggplot(data = elmhurst) +
-  geom_histogram(mapping = aes(x = gift_aid), binwidth = 0.5) + 
+  geom_histogram(mapping = aes(x = gift_aid), binwidth = 4) + 
   labs(x = "gift aid in thousands $", 
        y = "number of observations", 
        title = "number of observations per gift aid amount")
 ```
-The distribution of gift aid does not appear to be normal. It seems a bit more uniform than normal. There are a few outliers at around 7k and 32k.  Around 21k seems to have many more observatioins. As well as 25-27k. 
+The distribution of gift aid appears to follow the shape of a bell curve. Although it does not appear to be symmetrical. There are a few outliers above 30k USD in gift aid. 
 
 2. To better understand the distribution of `gift_aid`, we would like calculate measures of center and spread of the distribution. Use the `summarise` function to calculate the appropriate measures of center (mean or median) and spread (standard deviation or IQR) based on the shape of the distribution from Exercise 1. Show the code and output, and state the measures of center and spread in your narrative. *Be sure to report your conclusions for this exercise and the remainder of the lab in dollars.*
 ```{r}
@@ -69,7 +69,7 @@ The miniumum gift aid is 7,000 USD while the maximum is 32,720 USD. These where 
 3. Plot the distribution of `family_income` and calculate the appropriate summary statistics. Describe the distribution of `family_income` (shape, center, and spread, outliers) using the plot and appropriate summary statistics.  
 ```{r}
 ggplot(data = elmhurst) +
-  geom_histogram(mapping = aes(x = family_income), binwidth = 7) + 
+  geom_histogram(mapping = aes(x = family_income), binwidth = 20) + 
   labs(x = "family income in thousands $", 
        y = "number of observations", 
        title = "number of observations per family income")
@@ -96,7 +96,7 @@ ggplot(elmhurst, aes(x=family_income, y=gift_aid)) + geom_point()+
        title = "gift aid per family income ")
 ```
 
-Based on this scatter plot, there appears to be some relationship between gift aid and family income. Although there are a few strange outliers such as the highest family income. The relationship seems to be that an increase in family income is associated with a decrease in gift aid. Althougfh this relationship seems to be less apparent as the family income increases past 150k USD. 
+Based on this scatter plot, there appears to be some relationship between gift aid and family income. Although there are a few strange outliers such as the highest family income recieving about 20k USD in gift aid. The relationship seems to be that an increase in family income is associated with a decrease in gift aid. Althougfh this relationship seems to be less apparent as the family income increases past 150k USD. 
 
 
 ## Simple Linear Regression
@@ -163,7 +163,7 @@ There does not appear to be a constant variance for the residuals. Residual valu
 
     Make a histogram of the residuals. Based on the histogram, is the Normality assumption satisfied? Briefly explain your reasoning. 
     
-    Based on the plot below, we do see some resemblence of a normal distribution. However, it does not appear to be completely cemetric. 
+    Based on the plot below, we do see some resemblence of a normal distribution. However, it does not appear to be completely symetric.  If this was a normal distribution we would expect a constant increase in count as the residual approached 0. However, There seems to be a dip after -5. There is also an outlier at around residual = 10. 
 ```{r}
 ggplot(data = residual_model) +
   geom_histogram(mapping = aes(x = resid), binwidth = 2)
@@ -185,10 +185,10 @@ The interpretation of the R-Squared is that about 25% of the variance in financi
 ```{r}
 predict(linear_Model, newdata = data.frame(family_income = 90))
 ```
-Based on the model, she should expect 20,442 USD in gift aid. 
+Based on the model, she should expect 20,449 USD in gift aid. 
 
 15. Another high school senior is considering Elmhurst College, and her family income is about $310,000. Do you think it would be wise to use your model calculate the predicted gift aid for this student?  Briefly explain your reasoning. 
 
-Our model does not contain any data greater than 272k USD. Therefor we cannot use our model. 
+Our model does not contain any data greater than 272k USD. Therefor our model contains no evidence to support a prediction of a family income of 310,000 USD. Because of this, it would not be wise to use this model to calculate the predicted aid for this student. 
 
 *You're done and ready to submit your work! Knit, commit, and push all remaining changes. You can use the commit message "Done with Lab 2!", and make sure you have pushed all the files to GitHub (your Git pane in RStudio should be empty) and that <u>all</u> documents are updated in your repo on GitHub. Then submit the assignment on Gradescope following the instructions below.*
