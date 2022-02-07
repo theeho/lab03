@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Lab 3"
 author: "STAT 108"
 date: "1/26/2022"
 output: pdf_document
@@ -16,7 +16,10 @@ library(modelr)
 library(openintro)
 ```
 
+
+
 # Data: Gift aid at Elmhurst College
+GITHUB LINK: https://github.com/theeho/lab03
 
 In today's lab, we will analyze the `elmhurst` dataset in the openintro package. This dataset contains information about 50 randomly selected students from the 2011 freshmen class at Elmhurst College. The data were originally sampled from a table on all 2011 freshmen at the college that was included in the article ["What Students Really Pay to go to College"](https://www.chronicle.com/article/What-Students-Really-Pay-to-Go/131435) in *The Chronicle of Higher Education* article.
 
